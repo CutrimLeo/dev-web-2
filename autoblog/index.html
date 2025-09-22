@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CARSCLUB - Social</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
+</head>
+<body data-page="feed">
+
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <i class="fas fa-car"></i>
+          <span>CARSCLUB</span>
+        </div>
+
+        <div class="nav-search">
+          <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search-input" placeholder="Buscar posts...">
+          </div>
+        </div>
+
+        <div class="nav-auth" id="nav-auth">
+          <button class="btn-login" onclick="showLoginModal()">
+            <i class="fas fa-sign-in-alt"></i>
+            Login
+          </button>
+          <button class="btn-register" onclick="showRegisterModal()">
+            <i class="fas fa-user-plus"></i>
+            Cadastrar
+          </button>
+        </div>
+
+        <div class="nav-user" id="nav-user" style="display: none;">
+          <button class="nav-icon-btn" onclick="showPostModal()" title="Criar Post">
+            <i class="fas fa-plus-square"></i>
+          </button>
+          <button class="nav-icon-btn" onclick="goToProfile()" title="Perfil">
+            <i class="fas fa-user-circle"></i>
+          </button>
+          <div class="user-dropdown">
+            <span class="user-name" id="user-name"></span>
+            <button class="btn-logout" onclick="logout()">
+              <i class="fas fa-sign-out-alt"></i>
+              Sair
+            </button>
+          </div>
+        </div>
+
+        <div class="nav-toggle" id="nav-toggle">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <section class="feed-section" id="feed">
+      <div class="feed-container">
+        <div class="stories-section">
+          <div class="stories-container">
+            <div class="story-item add-story" onclick="showPostModal()">
+              <div class="story-avatar"><i class="fas fa-plus"></i></div>
+              <span>Sua história</span>
+            </div>
+          </div>
+        </div>
+        <div class="posts-feed" id="posts-feed"></div>
+        <div class="loading-indicator" id="loading-indicator" style="display: none;">
+          <div class="spinner"></div>
+          <span>Carregando mais posts...</span>
+        </div>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="sidebar-content">
+        <div class="user-suggestions">
+          <h3>Sugestões para você</h3>
+          <div class="suggestions-list"></div>
+        </div>
+
+        <div class="trending-tags">
+          <h3>Tags em alta</h3>
+          <div class="tags-list">
+            <span class="tag">#supercarros</span>
+            <span class="tag">#tunning</span>
+            <span class="tag">#carrosclassicos</span>
+            <span class="tag">#modificacoes</span>
+            <span class="tag">#racing</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="goToFeed()">
+      <i class="fas fa-home"></i>
+      <span>Feed</span>
+    </button>
+    <button class="nav-item" onclick="showExplore()">
+      <i class="fas fa-search"></i>
+      <span>Explorar</span>
+    </button>
+    <button class="nav-item" onclick="showPostModal()">
+      <i class="fas fa-plus-square"></i>
+      <span>Criar</span>
+    </button>
+    <!-- Fixed navigation to likes.html -->
+    <button class="nav-item" onclick="window.location.href='likes.html'">
+      <i class="fas fa-heart"></i>
+      <span>Curtidas</span>
+    </button>
+    <!-- Fixed navigation to profile.html -->
+    <button class="nav-item" onclick="window.location.href='profile.html'">
+      <i class="fas fa-user-circle"></i>
+      <span>Perfil</span>
+    </button>
+  </nav>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3><i class="fas fa-car"></i> CARSCLUB</h3>
+          <p>A comunidade dos apaixonados por carros</p>
+        </div>
+        <div class="footer-section">
+          <h4>Contato</h4>
+          <p><i class="fas fa-envelope"></i> contato@carsclub.com</p>
+          <p><i class="fas fa-phone"></i> (47) 99999-9999</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 CARSCLUB. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modals -->
+  <!-- Login Modal -->
+  <div class="modal" id="login-modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('login-modal')">&times;</span>
+      <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-email">Email:</label>
+          <input type="email" id="login-email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="login-password">Senha:</label>
+          <input type="password" id="login-password" name="senha" required>
+        </div>
+        <button type="submit" class="btn-primary">
+          <i class="fas fa-sign-in-alt"></i>
+          Entrar
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Register Modal -->
+  <div class="modal" id="register-modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('register-modal')">&times;</span>
+      <h2><i class="fas fa-user-plus"></i> Cadastrar</h2>
+      <form id="register-form">
+        <div class="form-group">
+          <label for="register-nome">Nome:</label>
+          <input type="text" id="register-nome" name="nome" required>
+        </div>
+        <div class="form-group">
+          <label for="register-sobrenome">Sobrenome:</label>
+          <input type="text" id="register-sobrenome" name="sobrenome" required>
+        </div>
+        <div class="form-group">
+          <label for="register-email">Email:</label>
+          <input type="email" id="register-email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="register-password">Senha:</label>
+          <input type="password" id="register-password" name="senha" required>
+        </div>
+        <div class="form-group">
+          <label for="register-biografia">Bio:</label>
+          <textarea id="register-biografia" name="biografia" rows="3" placeholder="Conte um pouco sobre você..."></textarea>
+        </div>
+        <button type="submit" class="btn-primary">
+          <i class="fas fa-user-plus"></i>
+          Cadastrar
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Post Modal -->
+  <div class="modal" id="post-modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('post-modal')">&times;</span>
+      <h2><i class="fas fa-plus-square"></i> Criar Post</h2>
+      <form id="post-form">
+        <div class="form-group">
+          <label for="post-title">Título:</label>
+          <input type="text" id="post-title" name="titulo" placeholder="Título do seu post...">
+        </div>
+        <div class="form-group">
+          <label for="post-content">Conteúdo:</label>
+          <textarea id="post-content" name="corpo" rows="4" placeholder="O que você está pensando?" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="post-images">Imagens:</label>
+          <input type="file" id="post-images" name="images[]" multiple accept="image/*">
+          <div class="upload-placeholder">
+            <i class="fas fa-images"></i>
+            <span>Adicione até 5 imagens</span>
+          </div>
+          <div id="image-preview"></div>
+        </div>
+        <button type="submit" class="btn-primary">
+          <i class="fas fa-paper-plane"></i>
+          Publicar
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Comments Modal -->
+  <div class="modal" id="comments-modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('comments-modal')">&times;</span>
+      <h2><i class="fas fa-comments"></i> Comentários</h2>
+      <div id="comments-list"></div>
+      <form id="comment-form">
+        <input type="hidden" id="comment-post-id" name="post_id">
+        <div class="comment-input-group">
+          <textarea id="comment-text" name="comentario" placeholder="Adicione um comentário..." rows="2" required></textarea>
+          <button type="submit" class="btn-comment">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil - CARSCLUB</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
+  <!-- Added profile-specific styles -->
+  <link href="profile-styles.css" rel="stylesheet">
+</head>
+<body data-page="profile">
+
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <i class="fas fa-car"></i>
+          <span>CARSCLUB</span>
+        </div>
+        
+        <div class="nav-search">
+          <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search-input" placeholder="Buscar posts...">
+          </div>
+        </div>
+        
+        <div class="nav-auth" id="nav-auth">
+          <button class="btn-login" onclick="showLoginModal()">
+            <i class="fas fa-sign-in-alt"></i>
+            Login
+          </button>
+          <button class="btn-register" onclick="showRegisterModal()">
+            <i class="fas fa-user-plus"></i>
+            Cadastrar
+          </button>
+        </div>
+        
+        <div class="nav-user" id="nav-user" style="display: none;">
+          <!-- Fixed navigation to index.html -->
+          <button class="nav-icon-btn" onclick="window.location.href='index.html'" title="Feed">
+            <i class="fas fa-home"></i>
+          </button>
+          <button class="nav-icon-btn" onclick="showPostModal()" title="Criar Post">
+            <i class="fas fa-plus-square"></i>
+          </button>
+          <button class="nav-icon-btn active" onclick="goToProfile()" title="Perfil">
+            <i class="fas fa-user-circle"></i>
+          </button>
+          <div class="user-dropdown">
+            <span class="user-name" id="user-name"></span>
+            <button class="btn-logout" onclick="logout()">
+              <i class="fas fa-sign-out-alt"></i>
+              Sair
+            </button>
+          </div>
+        </div>
+        
+        <div class="nav-toggle" id="nav-toggle">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="profile-main">
+    <div class="profile-container">
+      <!-- Profile Header -->
+      <div class="profile-header">
+        <div class="profile-avatar-section">
+          <div class="profile-avatar-container">
+            <img src="/placeholder.svg?height=150&width=150" 
+                 alt="Avatar do usuário" 
+                 class="profile-avatar" 
+                 id="profile-avatar">
+            <button class="avatar-edit-btn" onclick="editAvatar()" title="Alterar foto">
+              <i class="fas fa-camera"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="profile-info">
+          <div class="profile-header-top">
+            <h1 class="profile-username" id="profile-username">@usuario</h1>
+            <div class="profile-actions">
+              <button class="btn-edit-profile" onclick="showEditProfileModal()" id="edit-profile-btn">
+                <i class="fas fa-edit"></i>
+                Editar Perfil
+              </button>
+              <button class="btn-follow" onclick="toggleFollow()" id="follow-btn" style="display: none;">
+                <i class="fas fa-user-plus"></i>
+                Seguir
+              </button>
+              <button class="btn-message" onclick="sendMessage()" id="message-btn" style="display: none;">
+                <i class="fas fa-envelope"></i>
+                Mensagem
+              </button>
+            </div>
+          </div>
+          
+          <div class="profile-stats">
+            <div class="stat-item">
+              <span class="stat-number" id="posts-count">0</span>
+              <span class="stat-label">posts</span>
+            </div>
+            <div class="stat-item" onclick="showFollowersModal()">
+              <span class="stat-number" id="followers-count">0</span>
+              <span class="stat-label">seguidores</span>
+            </div>
+            <div class="stat-item" onclick="showFollowingModal()">
+              <span class="stat-number" id="following-count">0</span>
+              <span class="stat-label">seguindo</span>
+            </div>
+          </div>
+          
+          <div class="profile-bio">
+            <h2 class="profile-name" id="profile-name">Nome do Usuário</h2>
+            <p class="profile-description" id="profile-description">
+              Apaixonado por carros e velocidade. Compartilhando minha paixão automotiva com vocês!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Navigation -->
+      <div class="profile-nav">
+        <button class="profile-nav-item active" onclick="showPosts()" data-tab="posts">
+          <i class="fas fa-th"></i>
+          <span>POSTS</span>
+        </button>
+        <button class="profile-nav-item" onclick="showSaved()" data-tab="saved">
+          <i class="fas fa-bookmark"></i>
+          <span>SALVOS</span>
+        </button>
+        <button class="profile-nav-item" onclick="showTagged()" data-tab="tagged">
+          <i class="fas fa-user-tag"></i>
+          <span>MARCAÇÕES</span>
+        </button>
+      </div>
+
+      <!-- Profile Content Grid -->
+      <div class="profile-content">
+        <!-- Posts Grid -->
+        <div class="posts-grid" id="posts-grid">
+          <!-- Posts will be loaded here -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="empty-state" style="display: none;">
+          <div class="empty-state-icon">
+            <i class="fas fa-camera"></i>
+          </div>
+          <h3>Nenhum post ainda</h3>
+          <p>Quando você compartilhar fotos, elas aparecerão no seu perfil.</p>
+          <button class="btn-primary" onclick="showPostModal()">
+            <i class="fas fa-plus"></i>
+            Compartilhar sua primeira foto
+          </button>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-state" id="loading-state">
+          <div class="spinner"></div>
+          <span>Carregando posts...</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom navigation for mobile -->
+  <nav class="bottom-nav">
+    <!-- Fixed navigation to index.html -->
+    <button class="nav-item" onclick="window.location.href='index.html'">
+      <i class="fas fa-home"></i>
+      <span>Feed</span>
+    </button>
+    <button class="nav-item" onclick="showExplore()">
+      <i class="fas fa-search"></i>
+      <span>Explorar</span>
+    </button>
+    <button class="nav-item" onclick="showPostModal()">
+      <i class="fas fa-plus-square"></i>
+      <span>Criar</span>
+    </button>
+    <!-- Fixed navigation to likes.html -->
+    <button class="nav-item" onclick="window.location.href='likes.html'">
+      <i class="fas fa-heart"></i>
+      <span>Curtidas</span>
+    </button>
+    <button class="nav-item active" onclick="goToProfile()">
+      <i class="fas fa-user-circle"></i>
+      <span>Perfil</span>
+    </button>
+  </nav>
+
+  <!-- Modals -->
+  <!-- Edit Profile Modal -->
+  <div class="modal" id="edit-profile-modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('edit-profile-modal')">&times;</span>
+      <h2><i class="fas fa-user-edit"></i> Editar Perfil</h2>
+      <form id="edit-profile-form">
+        <div class="form-group">
+          <label for="edit-nome">Nome:</label>
+          <input type="text" id="edit-nome" name="nome" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-sobrenome">Sobrenome:</label>
+          <input type="text" id="edit-sobrenome" name="sobrenome" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-biografia">Bio:</label>
+          <textarea id="edit-biografia" name="biografia" rows="4" placeholder="Conte um pouco sobre você..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="edit-avatar">Foto do perfil:</label>
+          <input type="file" id="edit-avatar" name="avatar" accept="image/*">
+        </div>
+        <button type="submit" class="btn-primary">
+          <i class="fas fa-save"></i>
+          Salvar Alterações
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Post Detail Modal -->
+  <div class="modal" id="post-detail-modal">
+    <div class="modal-content modal-large post-detail-content">
+      <span class="close" onclick="closeModal('post-detail-modal')">&times;</span>
+      <div class="post-detail-layout">
+        <div class="post-detail-image">
+          <img src="/placeholder.svg" alt="Post" id="detail-post-image">
+        </div>
+        <div class="post-detail-sidebar">
+          <div class="post-detail-header">
+            <div class="post-author">
+              <img src="/placeholder.svg" alt="Avatar" class="author-avatar" id="detail-author-avatar">
+              <div class="author-info">
+                <h4 id="detail-author-name">Nome do Autor</h4>
+                <span id="detail-post-date">Data</span>
+              </div>
+            </div>
+            <button class="post-menu" onclick="showPostOptions()">
+              <i class="fas fa-ellipsis-h"></i>
+            </button>
+          </div>
+          
+          <div class="post-detail-content-area">
+            <div class="post-detail-caption">
+              <h3 id="detail-post-title"></h3>
+              <p id="detail-post-content"></p>
+            </div>
+            
+            <div class="post-detail-comments" id="detail-comments">
+              <!-- Comments will be loaded here -->
+            </div>
+          </div>
+          
+          <div class="post-detail-actions">
+            <div class="post-actions">
+              <button class="action-btn" onclick="toggleLikeDetail()" id="detail-like-btn">
+                <i class="fas fa-heart"></i>
+                <span class="like-count" id="detail-like-count">0</span>
+              </button>
+              <button class="action-btn" onclick="focusCommentInput()">
+                <i class="fas fa-comment"></i>
+                <span class="comment-count" id="detail-comment-count">0</span>
+              </button>
+              <button class="action-btn" onclick="sharePost()">
+                <i class="fas fa-share"></i>
+              </button>
+            </div>
+            
+            <div class="comment-form">
+              <form id="detail-comment-form">
+                <input type="hidden" id="detail-comment-post-id" name="post_id">
+                <div class="comment-input-group">
+                  <textarea id="detail-comment-text" name="comentario" placeholder="Adicione um comentário..." rows="1" required></textarea>
+                  <button type="submit" class="btn-comment">
+                    <i class="fas fa-paper-plane"></i>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Followers Modal -->
+  <div class="modal" id="followers-modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('followers-modal')">&times;</span>
+      <h2><i class="fas fa-users"></i> Seguidores</h2>
+      <div class="followers-list" id="followers-list">
+        <!-- Followers will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Following Modal -->
+  <div class="modal" id="following-modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('following-modal')">&times;</span>
+      <h2><i class="fas fa-user-friends"></i> Seguindo</h2>
+      <div class="following-list" id="following-list">
+        <!-- Following will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="script.js"></script>
+  <script src="profile.js"></script>
+</body>
+</html>

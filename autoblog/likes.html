@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CARSCLUB - Curtidas</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
+</head>
+<body data-page="likes">
+
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <i class="fas fa-car"></i>
+          <span>CARSCLUB</span>
+        </div>
+        
+        <div class="nav-search">
+          <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search-input" placeholder="Buscar posts...">
+          </div>
+        </div>
+        
+        <div class="nav-user" id="nav-user">
+          <!-- Fixed navigation to profile.html -->
+          <button class="nav-icon-btn" onclick="window.location.href='profile.html'" title="Perfil">
+            <i class="fas fa-user-circle"></i>
+          </button>
+          <div class="user-dropdown">
+            <span class="user-name" id="user-name"></span>
+            <button class="btn-logout" onclick="logout()">
+              <i class="fas fa-sign-out-alt"></i>
+              Sair
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <section class="feed-section" id="likes-feed">
+      <div class="feed-container">
+        <!-- Added filter section for liked posts -->
+        <div class="filter-section">
+          <h2><i class="fas fa-heart"></i> Posts Curtidos</h2>
+          <div class="filter-controls">
+            <input type="date" id="filter-start" placeholder="Data inicial">
+            <input type="date" id="filter-end" placeholder="Data final">
+            <button id="filter-btn" class="btn-primary">
+              <i class="fas fa-filter"></i>
+              Filtrar
+            </button>
+          </div>
+        </div>
+        
+        <div id="likes-loading" class="loading-indicator" style="display: none;">
+          <div class="spinner"></div>
+          <span>Carregando curtidas...</span>
+        </div>
+        
+        <!-- Changed to posts-feed for consistency -->
+        <div class="posts-feed" id="posts-feed"></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <!-- Fixed navigation to index.html -->
+    <button class="nav-item" onclick="window.location.href='index.html'">
+      <i class="fas fa-home"></i>
+      <span>Feed</span>
+    </button>
+    <button class="nav-item" onclick="showExplore()">
+      <i class="fas fa-search"></i>
+      <span>Explorar</span>
+    </button>
+    <button class="nav-item" onclick="showPostModal()">
+      <i class="fas fa-plus-square"></i>
+      <span>Criar</span>
+    </button>
+    <button class="nav-item active">
+      <i class="fas fa-heart"></i>
+      <span>Curtidas</span>
+    </button>
+    <!-- Fixed navigation to profile.html -->
+    <button class="nav-item" onclick="window.location.href='profile.html'">
+      <i class="fas fa-user-circle"></i>
+      <span>Perfil</span>
+    </button>
+  </nav>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="script.js"></script>
+  <script src="likes.js"></script>
+</body>
+</html>
